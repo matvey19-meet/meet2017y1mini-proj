@@ -95,25 +95,6 @@ def right():
     print("You pressed the right key")
 
 
-
-
-def make_food():
-    #The screen positions go from -SIZE/2 to +SIZE/2
-    #But we need to make food pieces only appear on game squares
-    #So we cut up the game board into multiples of SQUARE_SIZE.
-    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
-    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
-    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
-    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
-
-    food_x = random.randint(min_x,max_x)*SQUARE_SIZE
-    food_y = random.randint(min_y,max_y)*SQUARE_SIZE
-
-    
-
-
-
-
 def move_snake():
     my_pos = snake.pos()
     x_pos = my_pos[0]
@@ -133,22 +114,10 @@ def move_snake():
 
     my_pos=snake.pos()
     pos_list.append(my_pos)
+
     snake_stamp2 = snake.stamp()
     stamp_list.append(snake_stamp2)
-    ###################################
-    global food_stamps, food_pos
 
-    if snake.pos() in food_pos:
-        food_ind=food_pos.index(snake.pos())
-        food.clearstamp(food_stamps[food_ind])#REMOVES EATEN FOOD STAMPS
-
-        food_pos.pop(food_ind)#REMOVE ESTEN FOOD POSITION
-        
-        food_stamps.pop(food_ind)#REMOVE EATEN FOOD STAMP
-        print("You have eaten the food!")
-
-
-        
     old_stamp = stamp_list.pop(0)
     snake.clearstamp(old_stamp)
     pos_list.pop(0)
@@ -184,29 +153,10 @@ turtle.onkeypress(right,RIGHT_ARROW)
 
 turtle.listen()
 
-turtle.register_shape("trash.gif")
-
-
-food= turtle.clone()
-food.shape("trash.gif")
-
-food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
-food_stamps = []
-
-
-for this_food_pos in food_pos:
-    food.goto(this_food_pos)
-    food_stamp1 = food.stamp()
-    food_stamps.append(food_stamp1)
-food.hideturtle()
 
 
 
 
-
-
-
-turtle.mainloop()
 
 
 
