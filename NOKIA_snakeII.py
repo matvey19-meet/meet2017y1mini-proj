@@ -95,9 +95,22 @@ def right():
     print("You pressed the right key")
 
 
+turtle.register_shape("trash.gif")
 
+
+food= turtle.clone()
+food.shape("trash.gif")
+
+
+turtle.onkeypress(up,UP_ARROW)
+turtle.onkeypress(left,LEFT_ARROW)
+turtle.onkeypress(down,DOWN_ARROW)
+turtle.onkeypress(right,RIGHT_ARROW)
+
+turtle.listen()
 
 def make_food():
+    global food_stamps, food_pos
     #The screen positions go from -SIZE/2 to +SIZE/2
     #But we need to make food pieces only appear on game squares
     #So we cut up the game board into multiples of SQUARE_SIZE.
@@ -109,10 +122,11 @@ def make_food():
     food_x = random.randint(min_x,max_x)*SQUARE_SIZE
     food_y = random.randint(min_y,max_y)*SQUARE_SIZE
 
-    
-
-
-
+    food.goto(food_x, food_y)
+    new_food_pos = (food_x, food_y)
+    food_pos.append(new_food_pos)
+    food_stamp_id = food.stamp()
+    food_stamps.append(food_stamp_id)
 
 def move_snake():
     my_pos = snake.pos()
@@ -139,13 +153,15 @@ def move_snake():
     global food_stamps, food_pos
 
     if snake.pos() in food_pos:
+        print(food_stamps)
         food_ind=food_pos.index(snake.pos())
-        food.clearstamp(food_stamps[food_ind])#REMOVES EATEN FOOD STAMPS
-
-        food_pos.pop(food_ind)#REMOVE ESTEN FOOD POSITION
-        
+        food.clearstamp(food_stamps[food_ind]) #REMOVES EATEN FOOD STAMPS
+        food_pos.pop(food_ind) #REMOVE ESTEN FOOD POSITION
         food_stamps.pop(food_ind)#REMOVE EATEN FOOD STAMP
+##        print(food_ind, food_pos, food_stamps)
         print("You have eaten the food!")
+        
+        make_food()
 
 
         
@@ -174,39 +190,18 @@ def move_snake():
         quit()
     turtle.ontimer(move_snake,TIME_STEP)
 
-
+make_food()
 move_snake()
 
-turtle.onkeypress(up,UP_ARROW)
-turtle.onkeypress(left,LEFT_ARROW)
-turtle.onkeypress(down,DOWN_ARROW)
-turtle.onkeypress(right,RIGHT_ARROW)
-
-turtle.listen()
-
-turtle.register_shape("trash.gif")
-
-
-food= turtle.clone()
-food.shape("trash.gif")
-
-food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
-food_stamps = []
-
-
-for this_food_pos in food_pos:
-    food.goto(this_food_pos)
-    food_stamp1 = food.stamp()
-    food_stamps.append(food_stamp1)
-food.hideturtle()
-
-
-
-
-
-
-
-turtle.mainloop()
+##food.hideturtle()
+##
+##
+##
+##
+##
+##
+##
+##turtle.mainloop()
 
 
 
