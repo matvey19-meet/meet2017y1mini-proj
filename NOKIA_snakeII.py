@@ -7,14 +7,16 @@ turtle.bgcolor("black")
 
 turtle.tracer(1,0) # This helps the turtle move more smoothly
 
-SIZE_X=800
-SIZE_Y=500
+SIZE_X=1000
+SIZE_Y=700
 turtle.setup(SIZE_X,SIZE_Y)  ##Turtle window size
+
+
 
 turtle.penup()
 
 SQUARE_SIZE = 20
-START_LENGTH = 8
+START_LENGTH = 1
 
 #Initialize lists
 
@@ -24,9 +26,12 @@ food_pos = []
 food_stamps = []
 
 #Set up positions (x,y) of boxes that make up the snake
+turtle.register_shape("green.gif")
 snake = turtle.clone()
-snake.color("green")
-snake.shape("square")
+
+snake.shape("green.gif")
+
+turtle.color("white")
 
 
 
@@ -34,6 +39,14 @@ UP_EDGE =250
 DOWN_EDGE = -250
 RIGHT_EDGE = 400
 LEFT_EDGE = -400
+
+turtle.goto(400, 250)
+turtle.pendown()
+turtle.goto(400,-250)
+turtle.goto(-400,-250)
+turtle.goto(-400, 250)
+turtle.goto(400,250)
+turtle.penup()
 
 
 turtle.hideturtle()
@@ -114,10 +127,10 @@ def make_food():
     #The screen positions go from -SIZE/2 to +SIZE/2
     #But we need to make food pieces only appear on game squares
     #So we cut up the game board into multiples of SQUARE_SIZE.
-    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
-    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
-    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
-    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
+    min_x=-int(SIZE_X/2.6/SQUARE_SIZE)+1
+    max_x=int(SIZE_X/2.6/SQUARE_SIZE)-1
+    min_y=-int(SIZE_Y/2.6/SQUARE_SIZE)+1
+    max_y=int(SIZE_Y/2.6/SQUARE_SIZE)-1
 
     food_x = random.randint(min_x,max_x)*SQUARE_SIZE
     food_y = random.randint(min_y,max_y)*SQUARE_SIZE
@@ -153,22 +166,25 @@ def move_snake():
     global food_stamps, food_pos
 
     if snake.pos() in food_pos:
+        
         print(food_stamps)
         food_ind=food_pos.index(snake.pos())
         food.clearstamp(food_stamps[food_ind]) #REMOVES EATEN FOOD STAMPS
         food_pos.pop(food_ind) #REMOVE ESTEN FOOD POSITION
         food_stamps.pop(food_ind)#REMOVE EATEN FOOD STAMP
-##        print(food_ind, food_pos, food_stamps)
         print("You have eaten the food!")
-        
         make_food()
-
-
-        
-    old_stamp = stamp_list.pop(0)
-    snake.clearstamp(old_stamp)
-    pos_list.pop(0)
-
+    else:
+        old_stamp = stamp_list.pop(0)
+        snake.clearstamp(old_stamp)
+        pos_list.pop(0)
+    
+    
+    if pos_list[-1] in pos_list[0:-1]:
+        print("You ate yourself!")
+        quit()
+    
+    
     new_pos = snake.pos()
     new_x_pos = new_pos[0]
     new_y_pos = new_pos[1]
@@ -189,6 +205,11 @@ def move_snake():
         print("You hit the down edge! Game over!")
         quit()
     turtle.ontimer(move_snake,TIME_STEP)
+
+    if pos_list[-1] in pos_list[0:-1]:
+        print("You ate yourself!")
+        quit()
+            
 
 make_food()
 move_snake()
