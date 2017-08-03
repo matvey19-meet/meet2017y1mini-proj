@@ -3,17 +3,19 @@ import turtle
 import random#needed for later
 
 
-turtle.bgcolor("black")
+turtle.bgcolor("black")#BACKROUND COLOUR
 
 turtle.tracer(1,0) # This helps the turtle move more smoothly
 
+#Set up positions (x,y) of boxes that make up the snake
 SIZE_X=1000
 SIZE_Y=700
 turtle.setup(SIZE_X,SIZE_Y)  ##Turtle window size
 
-
-
 turtle.penup()
+
+c = 0#SEE move.snake()
+
 
 SQUARE_SIZE = 20
 START_LENGTH = 1
@@ -25,32 +27,34 @@ stamp_list = []
 food_pos = []
 food_stamps = []
 
-#Set up positions (x,y) of boxes that make up the snake
+#SNAKE SHAPE>>>
 turtle.register_shape("green.gif")
 snake = turtle.clone()
-
 snake.shape("green.gif")
-
 turtle.color("white")
 
 
-
+#BORDER CONTROL><
 UP_EDGE =250
 DOWN_EDGE = -250
 RIGHT_EDGE = 400
 LEFT_EDGE = -400
 
-turtle.goto(400, 250)
-turtle.pendown()
-turtle.goto(400,-250)
-turtle.goto(-400,-250)
-turtle.goto(-400, 250)
-turtle.goto(400,250)
-turtle.penup()
-
+border = turtle.clone()
+border.hideturtle()
+border.goto(400, 250)
+border.pendown()
+border.goto(400,-250)
+border.goto(-400,-250)
+border.goto(-400, 250)
+border.goto(400,250)
+border.penup()
 
 turtle.hideturtle()
-#___________________________________________________________
+
+
+turtle.penup()
+#CONSRUCTS SNAKE_
 Start_pos = snake.pos()
 
 for i in range(START_LENGTH):
@@ -89,28 +93,31 @@ direction = UP
 
 def up():
     global direction
-    direction=UP
+    if direction !=DOWN:
+        direction = UP
     print("You pressed the up key")
     
 def left():
     global direction
-    direction=LEFT
+    if direction != RIGHT:
+        direction = LEFT
     print("You pressed the left key")
 
 def down():
     global direction
-    direction=DOWN
+    if direction!=UP:
+        direction = DOWN
     print("You pressed the down key")
 
 def right():
     global direction
-    direction=RIGHT
+    if direction!=LEFT:
+        direction=RIGHT
     print("You pressed the right key")
 
 
+#FOOD
 turtle.register_shape("trash.gif")
-
-
 food= turtle.clone()
 food.shape("trash.gif")
 
@@ -173,7 +180,12 @@ def move_snake():
         food_pos.pop(food_ind) #REMOVE ESTEN FOOD POSITION
         food_stamps.pop(food_ind)#REMOVE EATEN FOOD STAMP
         print("You have eaten the food!")
-        make_food()
+        make_food() 
+        global c                #SCORE
+        c = c+1                 #
+        turtle.goto(-300, 200)
+        turtle.clear()
+        turtle.write(c)
     else:
         old_stamp = stamp_list.pop(0)
         snake.clearstamp(old_stamp)
